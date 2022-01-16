@@ -11,15 +11,6 @@ public class HelloController {
     //    List<String> names = List.of("Adrian", "Ola", "Maciek");
     List<String> names = new ArrayList<>();
 
-
-    /*
-    @GetMapping("/hello")
-    public String index() {
-        return "Hello World";
-    }
-
-     */
-
     @GetMapping("/hello")
     public String helloWithName(@RequestParam("name") String name) {
         return "Hello " + name;
