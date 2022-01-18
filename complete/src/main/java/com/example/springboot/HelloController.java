@@ -13,23 +13,16 @@ public class HelloController {
 
 
     List<String> names = new ArrayList<>();
-    List<Integer> numbers = new ArrayList<>();
+
 
     @GetMapping("/hello")
     public String helloWithName(@RequestParam("name") String name) {
-        if (name.isBlank()) {
-            throw new IllegalArgumentException("chceck the name");
-        }
         return "hello " + name;
-
     }
 
     @GetMapping("/hello/{id}")
     @ResponseBody
     public String getEmployeesByID(@PathVariable String id) {
-        if (id.isBlank()) {
-            throw new IllegalArgumentException("chceck the id");
-        }
         return "hello " + names.get(Integer.parseInt(id));
     }
 
@@ -42,17 +35,6 @@ public class HelloController {
     public String getNames() {
         return names.toString();
     }
-
-    @PostMapping("/number")
-    public void addNumber(@RequestBody String number) {
-        numbers.add(Integer.parseInt(number));
-    }
-
-    @GetMapping("/numbers")
-    public String getNumbers() {
-        return numbers.toString();
-    }
-
 
 
 }
