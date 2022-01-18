@@ -11,9 +11,7 @@ import java.util.Map;
 @RestController
 public class HelloController {
 
-
     List<String> names = new ArrayList<>();
-
 
     @GetMapping("/hello")
     public String helloWithName(@RequestParam("name") String name) {
