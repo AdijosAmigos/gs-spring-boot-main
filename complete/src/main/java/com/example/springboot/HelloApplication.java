@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 
+/*
 @SpringBootApplication
 public class HelloApplication {
 
@@ -24,3 +25,5 @@ public class HelloApplication {
         return hello.sayHello();
     }
 }
+
+ */

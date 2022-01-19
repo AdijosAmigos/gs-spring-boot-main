@@ -1,12 +1,14 @@
 package com.example.springboot;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasValue;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sun.jdi.event.ExceptionEvent;
 import org.assertj.core.api.Assertions;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.test.web.servlet.MockMvcResultHandlersDsl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,46 +43,33 @@ public class HelloControllerTest {
     @Test
     public void should_add_name() throws Exception {
 
-        List<String> names = new ArrayList<>();
-        String name = "adrian";
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders
+                .post("/hello")
+                .content(new JSONObject().put("name", "adrian").toString());
 
-        mvc.perform(MockMvcRequestBuilders.post("/hello").param("name", name))
-                .andDo(result -> names.add(name));
-
-        Assertions.assertThat(names.contains(name)).isTrue();
-
-    }
-
-
-    @Test
-    public void should_return_all_names() throws Exception {
-
-        //nie działa
-
-        List<String> names = new ArrayList<>();
-        String name = "adrian";
-
-        mvc.perform(MockMvcRequestBuilders.get("/names"))
-                .andDo(result -> names.add(name))
-                .andReturn();
-
-        Assertions.assertThat(names.isEmpty()).isFalse();
-
+        mvc.perform(postRequest).andExpect(status().isOk());
     }
 
     @Test
-    public void should_get_name_by_id() throws Exception {
+    public void should_getEmployeesByID() throws Exception {
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders
+                .get("/hello/{id}");
+//        tutaj mam problem
+        mvc.perform(getRequest).andExpect(status().isOk());
+    }
 
-        //nie działa
 
-        List<String> names = new ArrayList<>();
-        String id = "0";
-        String name = "adrian";
+//    działa?
+    @Test
+    public void should_return_names() throws Exception {
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders
+                .get("/names");
 
-        mvc.perform(MockMvcRequestBuilders.get("/hello{id}").param("id", id))
-                .andDo(result -> names.add(name))
-                .andReturn(names.get(Integer.parseInt(id)));
-
+        mvc.perform(getRequest).andDo(print()).andExpect(status().isOk());
 
     }
+
+
+
+
 }
