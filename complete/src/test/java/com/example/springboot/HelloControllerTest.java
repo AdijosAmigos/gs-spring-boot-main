@@ -53,7 +53,7 @@ public class HelloControllerTest {
     @Test
     public void should_getEmployeesByID() throws Exception {
         MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders
-                .get("/hello/{id}");
+                .get("/hello/{id}", 0);
 //        tutaj mam problem
         mvc.perform(getRequest).andExpect(status().isOk());
     }
