@@ -54,22 +54,20 @@ public class HelloControllerTest {
     public void should_getEmployeesByID() throws Exception {
         MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders
                 .get("/hello/{id}", 0);
-//        tutaj mam problem
+    //        tutaj mam problem
         mvc.perform(getRequest).andExpect(status().isOk());
     }
 
 
-//    działa?
+    //    działa?
     @Test
     public void should_return_names() throws Exception {
         MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders
-                .get("/names");
+                .get("/names1");
 
         mvc.perform(getRequest).andDo(print()).andExpect(status().isOk());
 
     }
-
-
 
 
 }
