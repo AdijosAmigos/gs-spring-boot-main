@@ -13,11 +13,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -54,7 +61,7 @@ class NamesControllerTest {
     void should_add_name() throws Exception {
         //given
         String name = "adrian";
-//        given(namesRepository.add(name));
+
         MvcResult mvcResult = mvc.perform(post("/names").content(name))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -67,12 +74,32 @@ class NamesControllerTest {
         String name = "adrian";
         given(namesRepository.getById(5)).willReturn(name);
 
-//        mvc.perform(get("/names/5")) @PathVariable
-        mvc.perform(get("/names/find?firstLetter=A")) //@PathParam
+        mvc.perform(get("/names/5")) //@PathVariable
+//        mvc.perform(get("/names/find?firstLetter=A")) //@PathParam
                 .andExpect(status().isOk())
                 .andReturn();
 
     }
+
+
+    @Test
+    void should_find_by_first_letter() throws Exception{
+        String maciek = "maciek";
+        String firstLetter = "m";
+
+        given(namesRepository.findAll()).willReturn(Collections.singletonList(maciek));
+
+        given(namesRepository.names.stream()
+                .filter(name -> name.startsWith(firstLetter))
+                .collect(Collectors.toList())).willReturn(List.of(maciek));
+
+        mvc.perform(get("/names/find?firstLetter=m"))
+                .andExpect(status().isOk());
+
+
+    }
+
+
 
 
 }
