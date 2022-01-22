@@ -87,14 +87,15 @@ class NamesControllerTest {
         String maciek = "maciek";
         String firstLetter = "m";
 
-        given(namesRepository.findAll()).willReturn(Collections.singletonList(maciek));
+//        given(namesRepository.findAll()).willReturn(new ArrayList<>(List.of(maciek)));
 
         given(namesRepository.names.stream()
                 .filter(name -> name.startsWith(firstLetter))
-                .collect(Collectors.toList())).willReturn(List.of(maciek));
+                .collect(Collectors.toList())).willReturn(new ArrayList<>(List.of(maciek)));
 
         mvc.perform(get("/names/find?firstLetter=m"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn();
 
 
     }
