@@ -17,6 +17,11 @@ public class NamesController {
         this.namesRepository = namesRepository;
     }
 
+    @GetMapping("/helloWorld")
+    String hello(@RequestParam String name) {
+        return "Hello World "+ name;
+    }
+
     @GetMapping("/names")
     List<String> all() {
         return namesRepository.findAll();

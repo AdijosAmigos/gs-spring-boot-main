@@ -52,7 +52,7 @@ class NamesControllerTest {
                 .andExpect(jsonPath("$[0]", is(name)))
                 .andReturn();
 
-        String contentAsString = mvcResult.getResponse().getContentAsString();
+//        String contentAsString = mvcResult.getResponse().getContentAsString();
 
     }
 
@@ -81,14 +81,25 @@ class NamesControllerTest {
 
     @Test
     void should_find_by_first_letter() throws Exception{
-
-        given(namesRepository.findAll()).willReturn(new ArrayList<>(List.of("maciek")));
+        String name = "maciek";
+        
+        given(namesRepository.findAll()).willReturn(new ArrayList<>(List.of(name)));
 
         mvc.perform(get("/names/find?firstLetter=m"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0]", is(name)))
+                .andReturn();
+
+        /*
+        mvc.perform(get("/names/find?firstLetter=m")
+                .content(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0]", is("maciek")))
                 .andReturn();
+
+         */
 
 
     }
