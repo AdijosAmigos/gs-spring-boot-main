@@ -3,6 +3,7 @@ package com.example.springboot.names;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,10 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -84,7 +82,7 @@ class NamesControllerTest {
     @Test
     void should_find_by_first_letter() throws Exception{
 
-        given(namesRepository.names).willReturn(new ArrayList<>(List.of("maciek")));
+        given(namesRepository.findAll()).willReturn(new ArrayList<>(List.of("maciek")));
 
         mvc.perform(get("/names/find?firstLetter=m"))
                 .andExpect(status().isOk())
