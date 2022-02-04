@@ -39,7 +39,7 @@ public class NamesController {
 
     @GetMapping("/names/find")
     List<String> findByFirstLetter(@RequestParam("firstLetter") String firstLetter) {
-        return namesRepository.names.stream()
+        return namesRepository.findAll().stream()
                 .filter(name -> name.startsWith(firstLetter))
                 .collect(Collectors.toList());
     }

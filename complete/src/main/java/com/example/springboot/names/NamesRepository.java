@@ -6,7 +6,7 @@ import java.util.List;
 
 @Repository
 public class NamesRepository {
-    final List<String> names;
+    private final List<String> names;
 
     public NamesRepository() {
         this.names = new ArrayList<>();
