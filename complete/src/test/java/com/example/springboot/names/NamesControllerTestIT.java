@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +29,9 @@ class NamesControllerTestIT {
 
     @Autowired
     private NamesRepository namesRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     ApplicationContext context;
@@ -53,7 +59,6 @@ class NamesControllerTestIT {
         assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).isEqualTo(expected);
-
     }
 
     @Test
@@ -77,11 +82,31 @@ class NamesControllerTestIT {
         namesRepository.add("czesiek");
 
         var result = restTemplate.getForEntity("http://localhost:" + port + "/find?firstLetter=a", String.class);
-
+        // czy w 79 nie powinno być String[].class? przeciez może znaleść więcej niż jedno imie zaczynajace sie na dana literke
         assertThat(result).isNotNull();
         assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).isEqualTo("adrian");
+    }
+
+    //proba przeslania calego uzytkownika przez request
+
+    @Test
+    void should_check_user() {
+        //given
+        Course course = new Course("math");
+        User user = new User(1L, "adrian", "adrian@email.com", new ArrayList<>(List.of(course)));
+        userRepository.addUser(user);
+        //when
+        var result = restTemplate.getForEntity("https://localhost:" + port + "/users", User.class);
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.hasBody()).isTrue();
+        assertThat(result.getBody()).isEqualTo(user);
+
+
+
     }
 
 
