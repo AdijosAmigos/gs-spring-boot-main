@@ -22,7 +22,7 @@ class NamesControllerTestIT {
     private int port;
 
     @Autowired
-    private TestRestTemplate resttemplate;
+    private TestRestTemplate restTemplate;
 
     @Autowired
     private NamesRepository namesRepository;
@@ -35,11 +35,54 @@ class NamesControllerTestIT {
         //given
         namesRepository.add("adrian");
         //when
-        var result = resttemplate.getForEntity("http://localhost:" + port + "/names", String[].class);
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/names", String[].class);
         //then
         assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).containsExactly("adrian");
     }
+
+    @Test
+    void should_add_name() {
+        //given
+        var body = ("adrian");
+        var expected = ("adrian");
+        //when
+        var result = restTemplate.postForEntity("http://localhost:" + port + "/names", body, String.class);
+        //then
+        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.hasBody()).isTrue();
+        assertThat(result.getBody()).isEqualTo(expected);
+
+    }
+
+    @Test
+    void should_find_by_id() {
+        //given
+        namesRepository.add("adrian");
+        namesRepository.add("czesiek");
+        //when
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/names/1", String.class);
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.hasBody()).isTrue();
+        assertThat(result.getBody()).isEqualTo("czesiek");
+    }
+
+    @Test
+    void should_return_by_first_letter() {
+
+        namesRepository.add("adrian");
+        namesRepository.add("czesiek");
+
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/find?firstLetter=a", String.class);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.hasBody()).isTrue();
+        assertThat(result.getBody()).isEqualTo("adrian");
+    }
+
 
 }

@@ -52,7 +52,6 @@ class NamesControllerTest {
                 .andExpect(jsonPath("$[0]", is(name)))
                 .andReturn();
 
-//        String contentAsString = mvcResult.getResponse().getContentAsString();
 
     }
 
@@ -91,15 +90,6 @@ class NamesControllerTest {
                 .andExpect(jsonPath("$[0]", is(name)))
                 .andReturn();
 
-        /*
-        mvc.perform(get("/names/find?firstLetter=m")
-                .content(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0]", is("maciek")))
-                .andReturn();
-
-         */
 
 
     }
