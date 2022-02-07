@@ -47,7 +47,7 @@ public class NamesController {
     }
 
     @GetMapping("/users")
-    List<User> findAllUsers(@RequestParam User user) {
+    List<User> findAllUsers() {
         return userRepository.findAll();
     }
 }

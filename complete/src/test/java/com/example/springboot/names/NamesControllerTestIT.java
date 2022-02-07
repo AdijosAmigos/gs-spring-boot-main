@@ -53,12 +53,13 @@ class NamesControllerTestIT {
         //given
         var body = ("adrian");
         var expected = ("adrian");
+
         //when
         var result = restTemplate.postForEntity("http://localhost:" + port + "/names", body, String.class);
         //then
         assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
-        assertThat(result.hasBody()).isTrue();
-        assertThat(result.getBody()).isEqualTo(expected);
+        assertThat(namesRepository.findAll()).contains(expected);
+
     }
 
     @Test
@@ -81,15 +82,19 @@ class NamesControllerTestIT {
         namesRepository.add("adrian");
         namesRepository.add("czesiek");
 
-        var result = restTemplate.getForEntity("http://localhost:" + port + "/find?firstLetter=a", String.class);
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/names/find?firstLetter=a", String[].class);
         // czy w 79 nie powinno być String[].class? przeciez może znaleść więcej niż jedno imie zaczynajace sie na dana literke
         assertThat(result).isNotNull();
         assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(result.hasBody()).isTrue();
-        assertThat(result.getBody()).isEqualTo("adrian");
+        assertThat(result.getBody()).containsExactly("adrian");
     }
 
-    //proba przeslania calego uzytkownika przez request
+//    dopisac testy na mozliwosc ze te metody nie dzialaja
+//    dopisac test (znajduje dwa imiona na litere a)
+//    co zwroci findbyid jezeli nie znajdzie zadnego id
+
+
 
     @Test
     void should_check_user() {
@@ -98,16 +103,15 @@ class NamesControllerTestIT {
         User user = new User(1L, "adrian", "adrian@email.com", new ArrayList<>(List.of(course)));
         userRepository.addUser(user);
         //when
-        var result = restTemplate.getForEntity("https://localhost:" + port + "/users", User.class);
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/users", User[].class);
         //then
         assertThat(result).isNotNull();
         assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(result.hasBody()).isTrue();
-        assertThat(result.getBody()).isEqualTo(user);
-
-
+        assertThat(result.getBody()).containsExactly(user);
 
     }
 
+// przeniesc do klasy usertest oraz stworzyc api do niego (dodawanie, usuwanie, szukanie)
 
 }
