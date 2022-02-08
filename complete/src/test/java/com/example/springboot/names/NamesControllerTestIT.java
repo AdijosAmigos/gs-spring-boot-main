@@ -53,7 +53,6 @@ class NamesControllerTestIT {
         //given
         var body = ("adrian");
         var expected = ("adrian");
-
         //when
         var result = restTemplate.postForEntity("http://localhost:" + port + "/names", body, String.class);
         //then
@@ -83,7 +82,7 @@ class NamesControllerTestIT {
         namesRepository.add("czesiek");
 
         var result = restTemplate.getForEntity("http://localhost:" + port + "/names/find?firstLetter=a", String[].class);
-        // czy w 79 nie powinno być String[].class? przeciez może znaleść więcej niż jedno imie zaczynajace sie na dana literke
+
         assertThat(result).isNotNull();
         assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(result.hasBody()).isTrue();
@@ -94,6 +93,71 @@ class NamesControllerTestIT {
 //    dopisac test (znajduje dwa imiona na litere a)
 //    co zwroci findbyid jezeli nie znajdzie zadnego id
 
+    //bad path
+    @Test
+    void should_throw_exception_when_name_doesnt_exist() throws Exception {
+
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/names", String[].class);
+
+        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.hasBody()).isTrue();
+        assertThat(result.getBody()).isEmpty();
+    }
+
+    @Test
+    void should_throw_exception_when_name_is_diff() throws Exception {
+
+        String expected = "adrian";
+        String body = "adriann";
+
+        var result = restTemplate.postForEntity("http://localhost:" + port + "/names", body, String[].class);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(namesRepository.findAll()).isNotEqualTo(expected);
+    }
+
+    @Test
+    void should_throw_exception_when_doesnt_find_by_id() throws Exception {
+
+        namesRepository.add("adrian");
+
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/names/1", String.class);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode().is5xxServerError()).isTrue();
+        assertThat(result.hasBody()).isTrue();
+        assertThat(result.getBody()).isNotEqualTo("adrian");
+
+    }
+
+    @Test
+    void should_throw_exception_when_doesnt_find_name_by_first_letter() throws Exception {
+
+        namesRepository.add("adrian");
+
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/names/find?firstLetter=s", String[].class);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.hasBody()).isTrue();
+        assertThat(result.getBody()).isNotEqualTo("adrian");
+
+    }
+
+    @Test
+    void should_find_more_than_one_name_by_first_letter() {
+
+        namesRepository.add("adrian");
+        namesRepository.add("adam");
+
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/names/find?firstLetter=a", String[].class);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.hasBody()).isTrue();
+        assertThat(result.getBody()).contains("adrian", "adam");
+    }
 
 
     @Test
