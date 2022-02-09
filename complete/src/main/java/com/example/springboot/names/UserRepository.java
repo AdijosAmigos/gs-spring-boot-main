@@ -17,12 +17,16 @@ public class UserRepository {
         return userList;
     }
 
-    public String getById(int id){
-        return String.valueOf(userList.get(id));
+    public User getById(int id){
+        return userList.get(id);
     }
 
     public void addUser (User user){
         userList.add(user);
+    }
+
+    public void deleteUser (User user){
+        userList.remove(user);
     }
 
 

@@ -146,7 +146,7 @@ class NamesControllerTestIT {
     }
 
     @Test
-    void should_find_more_than_one_name_by_first_letter() {
+    void should_find_more_than_one_name_by_first_letter() throws Exception{
 
         namesRepository.add("adrian");
         namesRepository.add("adam");
@@ -175,7 +175,5 @@ class NamesControllerTestIT {
         assertThat(result.getBody()).containsExactly(user);
 
     }
-
-// przeniesc do klasy usertest oraz stworzyc api do niego (dodawanie, usuwanie, szukanie)
 
 }

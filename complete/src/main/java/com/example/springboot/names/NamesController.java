@@ -46,8 +46,4 @@ public class NamesController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/users")
-    List<User> findAllUsers() {
-        return userRepository.findAll();
-    }
 }
