@@ -52,10 +52,11 @@ class UserTestIT {
     void should_throw_exception_when_users_doesnt_exist() throws Exception {
 
         User user = new User(1L, "adrian", "adrian@emgial.com");
+        userRepository.deleteUser(user);
 
         var result = restTemplate.getForEntity("http://localhost:" + port + "/users", User[].class);
 
-        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.getStatusCode().is5xxServerError()).isTrue();
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).doesNotContain(user);
 

@@ -1,16 +1,21 @@
 package com.example.springboot.names;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.HttpServerErrorException;
 
+import java.rmi.ServerError;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +104,7 @@ class NamesControllerTestIT {
 
         var result = restTemplate.getForEntity("http://localhost:" + port + "/names", String[].class);
 
-        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.getStatusCode().is5xxServerError()).isTrue();
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).isEmpty();
     }
@@ -127,7 +132,8 @@ class NamesControllerTestIT {
         assertThat(result).isNotNull();
         assertThat(result.getStatusCode().is5xxServerError()).isTrue();
         assertThat(result.hasBody()).isTrue();
-        assertThat(result.getBody()).isNotEqualTo("adrian");
+        //asercja poprawiona ?
+        assertThat(result.getBody()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.toString());
 
     }
 
@@ -139,14 +145,14 @@ class NamesControllerTestIT {
         var result = restTemplate.getForEntity("http://localhost:" + port + "/names/find?firstLetter=s", String[].class);
 
         assertThat(result).isNotNull();
-        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(result.getStatusCode().is5xxServerError()).isTrue();
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).isNotEqualTo("adrian");
 
     }
 
     @Test
-    void should_find_more_than_one_name_by_first_letter() throws Exception{
+    void should_find_more_than_one_name_by_first_letter() {
 
         namesRepository.add("adrian");
         namesRepository.add("adam");
