@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.HttpServerErrorException;
 
 import java.rmi.ServerError;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,20 +167,6 @@ class NamesControllerTestIT {
     }
 
 
-    @Test
-    void should_check_user() {
-        //given
-        Course course = new Course("math");
-        User user = new User(1L, "adrian", "adrian@email.com", new ArrayList<>(List.of(course)));
-        userRepository.addUser(user);
-        //when
-        var result = restTemplate.getForEntity("http://localhost:" + port + "/users", User[].class);
-        //then
-        assertThat(result).isNotNull();
-        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
-        assertThat(result.hasBody()).isTrue();
-        assertThat(result.getBody()).containsExactly(user);
 
-    }
 
 }

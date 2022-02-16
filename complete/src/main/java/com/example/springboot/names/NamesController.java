@@ -29,7 +29,7 @@ public class NamesController {
         try {
             namesRepository.findAll();
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("404 out of bound exception");
+            System.out.println("404 not found");
         }
         return namesRepository.findAll();
     }
@@ -44,7 +44,7 @@ public class NamesController {
         try {
             namesRepository.getById(Integer.parseInt(id));
         } catch(ArrayIndexOutOfBoundsException e){
-            System.out.println("404 out of bound exception");
+            System.out.println("404 not found");
         }
         return namesRepository.getById(Integer.parseInt(id));
     }
