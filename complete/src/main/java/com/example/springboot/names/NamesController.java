@@ -41,6 +41,11 @@ public class NamesController {
 
     @GetMapping("/names/{id}")
     String findById(@PathVariable String id) {
+        try {
+            namesRepository.getById(Integer.parseInt(id));
+        } catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("404 out of bound exception");
+        }
         return namesRepository.getById(Integer.parseInt(id));
     }
 
