@@ -25,8 +25,8 @@ public class UserRepository {
         userList.add(user);
     }
 
-    public void deleteUser (User user){
-        userList.remove(user);
+    public void deleteUser (int id){
+        userList.remove(userList.remove(id));
     }
 
 

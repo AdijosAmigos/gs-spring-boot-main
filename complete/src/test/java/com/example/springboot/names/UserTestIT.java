@@ -52,7 +52,7 @@ class UserTestIT {
     void should_throw_exception_when_users_doesnt_exist() throws Exception {
 
         User user = new User(1L, "adrian", "adrian@emgial.com");
-        userRepository.deleteUser(user);
+        userRepository.deleteUser(0);
 
         var result = restTemplate.getForEntity("http://localhost:" + port + "/users", User[].class);
 

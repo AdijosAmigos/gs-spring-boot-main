@@ -33,7 +33,7 @@ public class UserController {
 
     //czy w taki sposob usuwamy usera? czy nie powinnismy zamiast przesylac caly obiekt przeslac tylko id?
     @PostMapping("/deleteUser")
-    void deleteUser(@RequestBody User user){
-        userRepository.deleteUser(user);
+    void deleteUser(@RequestBody String id){
+        userRepository.deleteUser(Integer.parseInt(id));
     }
 }
