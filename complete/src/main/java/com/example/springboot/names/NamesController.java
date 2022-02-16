@@ -28,7 +28,7 @@ public class NamesController {
     List<String> all() {
         try {
             namesRepository.findAll();
-        } catch(ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("404 out of bound exception");
         }
         return namesRepository.findAll();
