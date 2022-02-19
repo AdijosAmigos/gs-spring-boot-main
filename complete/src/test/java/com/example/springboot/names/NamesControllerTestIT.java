@@ -105,7 +105,7 @@ class NamesControllerTestIT {
 
         var result = restTemplate.getForEntity("http://localhost:" + port + "/names", String[].class);
 
-        assertThat(result.getStatusCode().is5xxServerError()).isTrue();
+        assertThat(result.getStatusCode().value());
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).isEmpty();
     }
@@ -134,7 +134,7 @@ class NamesControllerTestIT {
         assertThat(result.getStatusCode().value()).isEqualTo(400);
         assertThat(result.hasBody()).isTrue();
         //asercja poprawiona ?
-        assertThat(result.getBody()).isEqualTo("This is dosnt exist!");
+        assertThat(result.getBody()).isEqualTo("This id doesnt exist!");
 
     }
 

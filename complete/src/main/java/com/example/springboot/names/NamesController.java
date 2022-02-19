@@ -49,7 +49,7 @@ public class NamesController {
     ResponseEntity<String> findById(@PathVariable String id) {
         Optional<String> name = namesRepository.findById(Integer.parseInt(id));
         return name.map(s -> new ResponseEntity<>(s, HttpStatus.OK))
-                .orElse(new ResponseEntity<>("This is dosnt exist!", HttpStatus.BAD_REQUEST));
+                .orElse(new ResponseEntity<>("This id doesnt exist!", HttpStatus.BAD_REQUEST));
     }
 
     /*
