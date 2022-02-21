@@ -122,7 +122,8 @@ class NamesControllerTestIT {
 
     }
 
-    //
+    //poprawiony nie działa zwraca 200 zamiast 400 bo w controllerze nie mam poprawnie
+    // zakodzonego streama z ktorego wyciaga imiona ktore zaczynaja sie na podany firstLetter
     @Test
     void should_throw_exception_when_doesnt_find_name_by_first_letter() throws Exception {
 

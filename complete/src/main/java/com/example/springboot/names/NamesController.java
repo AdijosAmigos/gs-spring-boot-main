@@ -48,7 +48,7 @@ public class NamesController {
     @GetMapping("/names/find")
     ResponseEntity<List<String>> findByFirstLetter(@RequestParam("firstLetter") String firstLetter) {
         Optional<List<String>> names = namesRepository.findAll()
-                .stream().filter(s -> s.stream().filter(s1 -> s1.startsWith(firstLetter)).collect(Collectors.toList())));
+                .stream().filter(s -> s.stream().filter(s1 -> s1.startsWith(firstLetter)).collect(Collectors.toList()));
         return names.map(s -> new ResponseEntity<>(s, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
