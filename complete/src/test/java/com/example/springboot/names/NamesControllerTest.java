@@ -1,10 +1,7 @@
 package com.example.springboot.names;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,17 +9,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,7 +31,7 @@ class NamesControllerTest {
     @MockBean
     NamesRepository namesRepository;
 
-
+/*
     @Test
     void should_return_all_names_when_exist() throws Exception {
         // given
@@ -51,9 +44,9 @@ class NamesControllerTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0]", is(name)))
                 .andReturn();
-
-
     }
+
+ */
 
     @Test
     void should_add_name() throws Exception {
@@ -77,11 +70,11 @@ class NamesControllerTest {
 
     }
 
-
+/*
     @Test
-    void should_find_by_first_letter() throws Exception{
+    void should_find_by_first_letter() throws Exception {
         String name = "maciek";
-        
+
         given(namesRepository.findAll()).willReturn(new ArrayList<>(List.of(name)));
 
         mvc.perform(get("/names/find?firstLetter=m"))
@@ -89,11 +82,9 @@ class NamesControllerTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0]", is(name)))
                 .andReturn();
-
-
-
     }
 
+ */
 
 
 

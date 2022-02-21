@@ -21,26 +21,18 @@ public class NamesController {
         this.userRepository = userRepository;
     }
 
-
-    @GetMapping("/helloWorld")
-    String hello(@RequestParam String name) {
-        return "Hello World " + name;
-    }
-
+    //poprawilem
     @GetMapping("/names")
-    List<String> all() {
-        try {
-            namesRepository.findAll();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("404 not found");
-        }
-        return namesRepository.findAll();
+    ResponseEntity<List<String>> all() {
+        Optional<List<String>> allnames = namesRepository.findAll();
+        return allnames.map(s -> new ResponseEntity<>(s, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @PostMapping("/names")
     ResponseEntity<Object> add(@RequestBody String name) {
-        if(name.length() > 20)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (name.length() > 20)
+            throw new NameAlreadyExist("Name already exist!");
         namesRepository.add(name);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -52,23 +44,15 @@ public class NamesController {
                 .orElse(new ResponseEntity<>("This id doesnt exist!", HttpStatus.BAD_REQUEST));
     }
 
-    /*
-    ResponseEntity<String> findById(@PathVariable String id) {
-        String name;
-        try {
-            name = namesRepository.getById(Integer.parseInt(id));
-        } catch(NotFoundException e){
-            return new ResponseEntity<>("This is dosnt exist!", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(name, HttpStatus.OK);
-    }
-     */
-
+    //dołożyłem response entity mam problem zeby ze streama wyciagnac akurat te slowa ktore zaczynaja sie na litere podana w endpoincie
     @GetMapping("/names/find")
-    List<String> findByFirstLetter(@RequestParam("firstLetter") String firstLetter) {
-        return namesRepository.findAll().stream()
-                .filter(name -> name.startsWith(firstLetter))
-                .collect(Collectors.toList());
+    ResponseEntity<List<String>> findByFirstLetter(@RequestParam("firstLetter") String firstLetter) {
+        Optional<List<String>> names = namesRepository.findAll()
+                .stream().filter(s -> s.stream().filter(s1 -> s1.startsWith(firstLetter)).collect(Collectors.toList())));
+        return names.map(s -> new ResponseEntity<>(s, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+
+
 
 }

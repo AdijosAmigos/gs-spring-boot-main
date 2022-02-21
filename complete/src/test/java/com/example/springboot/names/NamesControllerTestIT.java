@@ -1,27 +1,14 @@
 package com.example.springboot.names;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.HttpServerErrorException;
-
-import java.rmi.ServerError;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -53,7 +40,7 @@ class NamesControllerTestIT {
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).containsExactly("adrian");
     }
-
+/*
     @Test
     void should_add_name() {
         //given
@@ -64,8 +51,9 @@ class NamesControllerTestIT {
         //then
         assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(namesRepository.findAll()).contains(expected);
-
     }
+
+ */
 
     @Test
     void should_find_by_id() {
@@ -95,9 +83,6 @@ class NamesControllerTestIT {
         assertThat(result.getBody()).containsExactly("adrian");
     }
 
-//    dopisac testy na mozliwosc ze te metody nie dzialaja
-//    dopisac test (znajduje dwa imiona na litere a)
-//    co zwroci findbyid jezeli nie znajdzie zadnego id
 
     //bad path
     @Test
@@ -105,7 +90,7 @@ class NamesControllerTestIT {
 
         var result = restTemplate.getForEntity("http://localhost:" + port + "/names", String[].class);
 
-        assertThat(result.getStatusCode().value());
+        assertThat(result.getStatusCode().value()).isEqualTo(400);
         assertThat(result.hasBody()).isTrue();
         assertThat(result.getBody()).isEmpty();
     }
@@ -133,11 +118,11 @@ class NamesControllerTestIT {
         assertThat(result).isNotNull();
         assertThat(result.getStatusCode().value()).isEqualTo(400);
         assertThat(result.hasBody()).isTrue();
-        //asercja poprawiona ?
         assertThat(result.getBody()).isEqualTo("This id doesnt exist!");
 
     }
 
+    //
     @Test
     void should_throw_exception_when_doesnt_find_name_by_first_letter() throws Exception {
 
@@ -146,9 +131,8 @@ class NamesControllerTestIT {
         var result = restTemplate.getForEntity("http://localhost:" + port + "/names/find?firstLetter=s", String[].class);
 
         assertThat(result).isNotNull();
-        assertThat(result.getStatusCode().is5xxServerError()).isTrue();
+        assertThat(result.getStatusCode().value()).isEqualTo(400);
         assertThat(result.hasBody()).isTrue();
-        assertThat(result.getBody()).isNotEqualTo("adrian");
 
     }
 

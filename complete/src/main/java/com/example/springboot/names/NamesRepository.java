@@ -2,9 +2,11 @@ package com.example.springboot.names;
 
 import org.springframework.stereotype.Repository;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class NamesRepository {
@@ -18,8 +20,12 @@ public class NamesRepository {
         names.add(name);
     }
 
-    public List<String> findAll() {
-        return names;
+    public Optional<List<String>> findAll() {
+        if(names.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.ofNullable(names.stream().toList());
+
     }
 
     public Optional<String> findById(int id) {
