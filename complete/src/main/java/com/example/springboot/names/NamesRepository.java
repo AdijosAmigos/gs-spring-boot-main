@@ -20,13 +20,9 @@ public class NamesRepository {
         names.add(name);
     }
 
-    public Optional<List<String>> findAll() {
-        if(names.isEmpty()){
-            return Optional.empty();
+    public List<String> findAll() {
+            return names;
         }
-        return Optional.ofNullable(names.stream().toList());
-
-    }
 
     public Optional<String> findById(int id) {
         if (id > names.size()-1) {

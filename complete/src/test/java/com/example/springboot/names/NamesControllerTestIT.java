@@ -86,26 +86,25 @@ class NamesControllerTestIT {
 
     //bad path
     @Test
-    void should_throw_exception_when_name_doesnt_exist() throws Exception {
+    void should_return_empty_list_when_no_names() throws Exception {
 
         var result = restTemplate.getForEntity("http://localhost:" + port + "/names", String[].class);
 
-        assertThat(result.getStatusCode().value()).isEqualTo(400);
-        assertThat(result.hasBody()).isTrue();
-        assertThat(result.getBody()).isEmpty();
+        assertThat(result.getStatusCode().value()).isEqualTo(200);
+        String[] names = result.getBody();
+        assertThat(names).isEmpty();
     }
 
     @Test
-    void should_throw_exception_when_name_is_diff() throws Exception {
+    void should_return_badRequest_when_name_longer_then_20_chaarcters() throws Exception {
 
-        String expected = "adrian";
-        String body = "adriann";
+        String name = "asasdasdasdasdasdasdasdasdasdasd";
 
-        var result = restTemplate.postForEntity("http://localhost:" + port + "/names", body, String[].class);
+        var result = restTemplate.postForEntity("http://localhost:" +port+ "/names", name, String.class);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
-        assertThat(namesRepository.findAll()).isNotEqualTo(expected);
+        assertThat(result.getStatusCode().value()).isEqualTo(400);
+        assertThat(result.getBody()).isEqualTo("Name too long!");
+
     }
 
     @Test
@@ -129,7 +128,7 @@ class NamesControllerTestIT {
 
         namesRepository.add("adrian");
 
-        var result = restTemplate.getForEntity("http://localhost:" + port + "/names/find?firstLetter=s", String[].class);
+        var result = restTemplate.getForEntity("http://localhost:" + port + "/names/find", String.class);
 
         assertThat(result).isNotNull();
         assertThat(result.getStatusCode().value()).isEqualTo(400);

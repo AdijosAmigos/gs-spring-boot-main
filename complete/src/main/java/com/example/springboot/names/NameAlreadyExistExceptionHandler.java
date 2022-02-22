@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
 public class NameAlreadyExistExceptionHandler {
 
     @ExceptionHandler(value = NameAlreadyExist.class)
-    public ResponseEntity<Object> handleRequestException(NameAlreadyExist e){
+    public ResponseEntity<Object> handleRequestException(NameAlreadyExist e) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         ApiException exception = new ApiException(
                 e.getMessage(),
@@ -21,5 +21,10 @@ public class NameAlreadyExistExceptionHandler {
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
         return new ResponseEntity<>(exception, badRequest);
+    }
+
+    @ExceptionHandler(value = ValidationException.class)
+    public ResponseEntity<String> handleValidationException(ValidationException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

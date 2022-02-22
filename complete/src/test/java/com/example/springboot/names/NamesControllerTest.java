@@ -31,7 +31,7 @@ class NamesControllerTest {
     @MockBean
     NamesRepository namesRepository;
 
-/*
+
     @Test
     void should_return_all_names_when_exist() throws Exception {
         // given
@@ -46,7 +46,7 @@ class NamesControllerTest {
                 .andReturn();
     }
 
- */
+
 
     @Test
     void should_add_name() throws Exception {
@@ -70,7 +70,6 @@ class NamesControllerTest {
 
     }
 
-/*
     @Test
     void should_find_by_first_letter() throws Exception {
         String name = "maciek";
@@ -84,7 +83,6 @@ class NamesControllerTest {
                 .andReturn();
     }
 
- */
 
 
 

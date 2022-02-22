@@ -21,18 +21,18 @@ public class NamesController {
         this.userRepository = userRepository;
     }
 
-    //poprawilem
+
     @GetMapping("/names")
     ResponseEntity<List<String>> all() {
-        Optional<List<String>> allnames = namesRepository.findAll();
-        return allnames.map(s -> new ResponseEntity<>(s, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        List<String> allNames = namesRepository.findAll();
+        return new ResponseEntity<>(allNames, HttpStatus.OK);
     }
+
 
     @PostMapping("/names")
     ResponseEntity<Object> add(@RequestBody String name) {
         if (name.length() > 20)
-            throw new NameAlreadyExist("Name already exist!");
+            throw new ValidationException("Name too long!");
         namesRepository.add(name);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -44,15 +44,16 @@ public class NamesController {
                 .orElse(new ResponseEntity<>("This id doesnt exist!", HttpStatus.BAD_REQUEST));
     }
 
-    //dołożyłem response entity mam problem zeby ze streama wyciagnac akurat te slowa ktore zaczynaja sie na litere podana w endpoincie
     @GetMapping("/names/find")
-    ResponseEntity<List<String>> findByFirstLetter(@RequestParam("firstLetter") String firstLetter) {
-        Optional<List<String>> names = namesRepository.findAll()
-                .stream().filter(s -> s.stream().filter(s1 -> s1.startsWith(firstLetter)).collect(Collectors.toList()));
-        return names.map(s -> new ResponseEntity<>(s, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    ResponseEntity<List<String>> findByFirstLetter(@RequestParam(name = "firstLetter") String firstLetter) {
+        if (firstLetter == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<String> names = namesRepository.findAll().stream()
+                .filter(s -> s.startsWith(firstLetter))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(names, HttpStatus.OK);
     }
-
 
 
 }
